@@ -33,5 +33,6 @@ public class Earthquake {
 
     public String getBall() {
         return "Ball";
+
     }
 }
