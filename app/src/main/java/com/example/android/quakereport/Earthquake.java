@@ -26,4 +26,8 @@ public class Earthquake {
     public long getTime(){
         return mTimeInMillis;
     }
+
+    public String getSomeShit() {
+        return "Some Shit.";
+    }
 }
