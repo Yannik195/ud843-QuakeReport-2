@@ -30,4 +30,8 @@ public class Earthquake {
     public String getSomeShit() {
         return "Some Shit.";
     }
+
+    public String getBall() {
+        return "Ball";
+    }
 }
