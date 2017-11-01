@@ -1,7 +1,5 @@
 package com.example.android.quakereport;
 
-
-
 public class Earthquake {
 
     private double mMagnitude;
@@ -9,7 +7,6 @@ public class Earthquake {
     private long mTimeInMillis;
 
     public Earthquake(double magnitude, String location, long timeInMillis){
-
         mMagnitude = magnitude;
         mLocation = location;
         mTimeInMillis = timeInMillis;
@@ -25,14 +22,5 @@ public class Earthquake {
 
     public long getTime(){
         return mTimeInMillis;
-    }
-
-    public String getSomeShit() {
-        return "Some Shit.";
-    }
-
-    public String getBall() {
-        return "Ball";
-
     }
 }
