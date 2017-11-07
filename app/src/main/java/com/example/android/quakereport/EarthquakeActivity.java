@@ -17,6 +17,7 @@ package com.example.android.quakereport;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -36,11 +37,27 @@ public class EarthquakeActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
 
+    private static final String USGS_REQUEST_URL =
+            "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&eventtype=earthquake&orderby=time&minmag=6&limit=10";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
 
+        EarthquakeAsyncTast task = new EarthquakeAsyncTast();
+        task.execute(USGS_REQUEST_URL);
+
+        ArrayList<Earthquake> earthquakes = new ArrayList<>();
+        ListView eartquakeListView = (ListView) findViewById(R.id.list);
+        EarthquakeAdapter adapter = new EarthquakeAdapter(this, earthquakes);
+        eartquakeListView.setAdapter(adapter);
+        //earthquakes.add(new Earthquake(ea))
+
+
+
+
+/*
         ArrayList<Earthquake> earthquakes = QueryUtils.extractEarthquakes();
 
         // Find a reference to the {@link ListView} in the layout
@@ -66,6 +83,22 @@ public class EarthquakeActivity extends AppCompatActivity {
                 intent.setData(Uri.parse(url));
                 startActivity(intent);
             }
-        });
+        });*/
     }
+
+    private class EarthquakeAsyncTast extends AsyncTask<String, Void, Earthquake> {
+
+        @Override
+        protected Earthquake doInBackground(String... url) {
+            Earthquake earthquake = QueryUtils.fetchEarthquakeDate(url[0]);
+            return earthquake;
+        }
+
+        @Override
+        protected void onPostExecute(Earthquake earthquake) {
+            super.onPostExecute(earthquake);
+            Log.i(LOG_TAG, "Earthquake: " + earthquake.getLocation());
+        }
+    }
+
 }
