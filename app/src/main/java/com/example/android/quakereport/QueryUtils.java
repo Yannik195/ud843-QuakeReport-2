@@ -16,6 +16,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Helper methods related to requesting and receiving earthquake data from USGS.
@@ -27,7 +28,7 @@ public final class QueryUtils {
      */
     public static final String LOG_TAG = QueryUtils.class.getSimpleName();
 
-    public static Earthquake fetchEarthquakeDate(String requestUrl) {
+    public static List<Earthquake> fetchEarthquakeData(String requestUrl) {
         URL url = createUrl(requestUrl);
         String jsonResponse = null;
         try {
@@ -36,8 +37,8 @@ public final class QueryUtils {
             e.printStackTrace();
             Log.e(LOG_TAG, "Error" + e);
         }
-        Earthquake earthquake = extractFeatureFromEarthquake(jsonResponse);
-        return earthquake;
+        List<Earthquake> earthquakes = extractFeatureFromJson(jsonResponse);
+        return earthquakes;
 
     }
 
@@ -100,24 +101,27 @@ public final class QueryUtils {
         return output.toString();
     }
 
-    private static Earthquake extractFeatureFromEarthquake(String earthquakeJSON) {
+    private static List<Earthquake> extractFeatureFromJson(String earthquakeJSON) {
+
         if (TextUtils.isEmpty(earthquakeJSON)) {
             return null;
         }
-
+        List<Earthquake> earthquakes = new ArrayList<>();
         try {
             JSONObject baseJsonObject = new JSONObject(earthquakeJSON);
             JSONArray featureArray = baseJsonObject.getJSONArray("features");
             if (featureArray.length() > 0) {
-                for (int i = 0; i <= featureArray.length(); i++) {
+                for (int i = 0; i < featureArray.length(); i++) {
                     JSONObject currentEarthquake = featureArray.getJSONObject(i);
-                    JSONObject properites = currentEarthquake.getJSONObject("properties");
-                    double magnitude = properites.getDouble("mag");
-                    String location = properites.getString("place");
-                    long time = properites.getLong("time");
-                    String url = properites.getString("url");
-                    return new Earthquake(magnitude, location, time, url);
+                    JSONObject properties = currentEarthquake.getJSONObject("properties");
+                    double magnitude = properties.getDouble("mag");
+                    String location = properties.getString("place");
+                    long time = properties.getLong("time");
+                    String url = properties.getString("url");
+                    earthquakes.add(new Earthquake(magnitude, location, time, url));
+
                 }
+                return earthquakes;
             }
         } catch (JSONException e) {
             e.printStackTrace();
