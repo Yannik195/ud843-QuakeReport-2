@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,7 +38,8 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake>{
         Earthquake currentEarthquake = getItem(position);
 
         TextView magnitudeTextView = listItemView.findViewById(R.id.mag_text_view);
-        magnitudeTextView.setText(String.valueOf(currentEarthquake.getMagnitude()));
+        DecimalFormat decimalFormat = new DecimalFormat("0.#");
+        magnitudeTextView.setText(String.valueOf(decimalFormat.format(currentEarthquake.getMagnitude())));
 
         // Set the proper background color on the magnitude circle.
         // Fetch the background from the TextView, which is a GradientDrawable.
@@ -48,6 +50,23 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake>{
 
         // Set the color on the magnitude circle
         magnitudeCircle.setColor(magnitudeColor);
+
+        TextView tsunamiTextView = listItemView.findViewById(R.id.tsunami_text_view);
+        GradientDrawable tsunamiRectangle = (GradientDrawable) tsunamiTextView.getBackground();
+
+
+        if (currentEarthquake.getTsunami() == 0) {
+            tsunamiTextView.setText("No Tsunami");
+            tsunamiRectangle.setColor(Color.parseColor("#BDBDBD"));
+            //tsunamiTextView.setBackgroundColor(Color.parseColor("#BDBDBD"));
+        } else if (currentEarthquake.getTsunami() == 1) {
+            tsunamiTextView.setText("Tsunami");
+            //tsunamiTextView.setBackgroundColor(Color.parseColor("#E53935"));
+            //tsunamiTextView.setBackground(R.drawable.tsunami_rectangle);
+            tsunamiRectangle.setColor(Color.parseColor("#4DB6AC"));
+        }
+
+
 
 
 

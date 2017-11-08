@@ -118,7 +118,8 @@ public final class QueryUtils {
                     String location = properties.getString("place");
                     long time = properties.getLong("time");
                     String url = properties.getString("url");
-                    earthquakes.add(new Earthquake(magnitude, location, time, url));
+                    int tsunami = properties.getInt("tsunami");
+                    earthquakes.add(new Earthquake(magnitude, location, time, url, tsunami));
 
                 }
                 return earthquakes;
