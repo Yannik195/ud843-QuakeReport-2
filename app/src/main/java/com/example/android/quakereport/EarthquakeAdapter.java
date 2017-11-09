@@ -7,6 +7,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,11 +60,13 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake>{
             tsunamiTextView.setText("No Tsunami");
             tsunamiRectangle.setColor(Color.parseColor("#BDBDBD"));
             //tsunamiTextView.setBackgroundColor(Color.parseColor("#BDBDBD"));
+            Log.i("EarthquakeAdapter", "Color: Grey");
         } else if (currentEarthquake.getTsunami() == 1) {
             tsunamiTextView.setText("Tsunami");
             //tsunamiTextView.setBackgroundColor(Color.parseColor("#E53935"));
             //tsunamiTextView.setBackground(R.drawable.tsunami_rectangle);
             tsunamiRectangle.setColor(Color.parseColor("#4DB6AC"));
+            Log.i("EarthquakeAdapter", "Color: Green");
         }
 
 

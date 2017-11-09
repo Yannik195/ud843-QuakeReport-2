@@ -30,6 +30,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
      * Adapter for the list of earthquakes
      */
     private EarthquakeAdapter mAdapter;
+    private TextView emptyTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,9 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         // Set the adapter on the {@link ListView}
         // so the list can be populated in the user interface
         earthquakeListView.setAdapter(mAdapter);
+
+        emptyTextView = (TextView) findViewById(R.id.empty_text_view);
+        earthquakeListView.setEmptyView(emptyTextView);
 
         // Set an item click listener on the ListView, which sends an intent to a web browser
         // to open a website with more information about the selected earthquake.
@@ -107,6 +112,10 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
 
     @Override
     public void onLoadFinished(Loader<List<Earthquake>> loader, List<Earthquake> earthquakes) {
+        ProgressBar progressBar = findViewById(R.id.loading_indicator);
+        progressBar.setVisibility(View.GONE);
+        ProgressBar progressBar1 = findViewById(R.id.progressBar);
+        progressBar1.setVisibility(View.GONE);
         // Clear the adapter of previous earthquake data
         mAdapter.clear();
 
@@ -115,6 +124,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         if (earthquakes != null && !earthquakes.isEmpty()) {
             mAdapter.addAll(earthquakes);
         }
+        emptyTextView.setText(R.string.no_earthquakes);
     }
 
     @Override
@@ -130,7 +140,6 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
         public EarthquakeLoader(Context context, String url) {
             super(context);
             mUrl = url;
-            // TODO: Finish implementing this constructor
         }
 
         @Override
@@ -143,7 +152,6 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
             if (mUrl == null) {
                 return null;
             }
-
             // Perform the network request, parse the response, and extract a list of earthquakes.
             List<Earthquake> earthquakes = QueryUtils.fetchEarthquakeData(mUrl);
             return earthquakes;
